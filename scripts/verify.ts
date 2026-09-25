@@ -249,7 +249,7 @@ interface Job {
 }
 
 function treeVarFor(params: string[], idx: number) {
-  for (let i = idx - 1; i >= 0; i--) if (baseT(params[i]) === 'TreeNode') return `a${i}`;
+  for (let i = idx - 1; i >= 0; i--) if (params[i] === 'TreeNode') return `a${i}`;
   return 'a0';
 }
 
