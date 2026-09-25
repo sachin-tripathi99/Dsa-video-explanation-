@@ -14,8 +14,10 @@ function FitBox({ children, dep }: { children: ReactNode; dep: string }) {
     const i = inner.current;
     if (!o || !i) return;
     const fit = () => {
-      const w = i.scrollWidth;
-      const h = i.scrollHeight;
+      // Centred content can overflow on the left too, which scrollWidth misses: measure children's layout boxes as well.
+      const kids = Array.from(i.children) as HTMLElement[];
+      const w = Math.max(i.scrollWidth, ...kids.map((c) => c.offsetWidth));
+      const h = Math.max(i.scrollHeight, ...kids.map((c) => c.offsetHeight));
       const next = Math.min(1, o.clientWidth / Math.max(w, 1), o.clientHeight / Math.max(h, 1));
       setK((prev) => (Math.abs(prev - next) > 0.01 ? next : prev));
     };
