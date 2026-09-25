@@ -260,6 +260,7 @@ function javaFnTest(j: FnJudge, t: Test, ti: number, id: string) {
   if (j.ret === 'void') body = `${call}; H.emit("${id}", ${ti}, H.ser(a${j.inplace ?? 0}));`;
   else if (j.returnK !== undefined) body = `int k = ${call}; H.emit("${id}", ${ti}, H.ser(java.util.Arrays.copyOf(a${j.returnK}, k)));`;
   else if (j.ret === 'ListNode@ref') body = `ListNode r = ${call}; H.emit("${id}", ${ti}, H.ser(H.indexOf(r)));`;
+  else if (j.ret === 'TreeNode@val') body = `TreeNode r = ${call}; H.emit("${id}", ${ti}, r == null ? "null" : H.ser(r.val));`;
   else if (j.inplace !== undefined) body = `${call}; H.emit("${id}", ${ti}, H.ser(a${j.inplace}));`;
   else body = `${javaType(j.ret)} r = ${call}; H.emit("${id}", ${ti}, H.ser(r));`;
   return `try { ${decls} ${body} } catch (Throwable e) { H.fail("${id}", ${ti}, e); }`;
@@ -287,6 +288,7 @@ function pyFnTest(j: FnJudge, t: Test) {
   if (j.ret === 'void') ret = `    ${call}\n    return H.ser(a${j.inplace ?? 0})`;
   else if (j.returnK !== undefined) ret = `    k = ${call}\n    return H.ser(a${j.returnK}[:k])`;
   else if (j.ret === 'ListNode@ref') ret = `    return H.ser(H.index_of(${call}))`;
+  else if (j.ret === 'TreeNode@val') ret = `    r = ${call}\n    return H.ser(None if r is None else r.val)`;
   else if (j.inplace !== undefined) ret = `    ${call}\n    return H.ser(a${j.inplace})`;
   else ret = `    return H.ser(${call})`;
   return `${decls || '    pass'}\n${ret}`;
@@ -310,6 +312,7 @@ function cppFnTest(j: FnJudge, t: Test, ti: number, id: string) {
   if (j.ret === 'void') body = `${call}; H::emit("${id}", ${ti}, H::ser(a${j.inplace ?? 0}));`;
   else if (j.returnK !== undefined) body = `int k = ${call}; H::emit("${id}", ${ti}, H::ser(decltype(a${j.returnK})(a${j.returnK}.begin(), a${j.returnK}.begin() + k)));`;
   else if (j.ret === 'ListNode@ref') body = `ListNode* r = ${call}; H::emit("${id}", ${ti}, H::ser(H::indexOf(r)));`;
+  else if (j.ret === 'TreeNode@val') body = `TreeNode* r = ${call}; H::emit("${id}", ${ti}, r ? H::ser(r->val) : string("null"));`;
   else if (j.inplace !== undefined) body = `${call}; H::emit("${id}", ${ti}, H::ser(a${j.inplace}));`;
   else body = `auto r = ${call}; H::emit("${id}", ${ti}, H::ser(r));`;
   return `{ Solution sol; ${decls} ${body} }`;
