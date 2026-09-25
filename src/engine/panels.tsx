@@ -324,7 +324,8 @@ export function layoutTree(p: TreePanel) {
 function TreeView({ p }: { p: TreePanel }) {
   const { pos, cols, maxD } = layoutTree(p);
   const nNodes = Object.keys(pos).length;
-  const colW = p.binary ? (nNodes > 20 ? 44 : 56) : nNodes > 24 ? 50 : 70;
+  const maxLeafLen = Math.max(1, ...Object.entries(p.nodes).filter(([id, nd]) => pos[id] && !nd.kids.some((k) => k && pos[k])).map(([, nd]) => String(nd.v).length));
+  const colW = p.binary ? (nNodes > 20 ? 44 : 56) : Math.max(nNodes > 24 ? 50 : 70, maxLeafLen * 9.4 + 26);
   const levelH = maxD > 4 ? 70 : 84;
   const r = p.binary ? (nNodes > 20 ? 19 : 23) : nNodes > 24 ? 19 : 23;
   const W = Math.max(cols * colW + 40, 200);
@@ -366,11 +367,15 @@ function TreeView({ p }: { p: TreePanel }) {
         return (
           <g key={id} className={`mv ${tc(p.tones[id])}`} style={{ transform: `translate(${X(id)}px, ${Y(id)}px)` }}>
             <g className="pop-in">
-              <circle className="shape" r={r} />
-              <text className="v-txt" y={1} textAnchor="middle" dominantBaseline="central" fontSize={fitFont(s, r * 2, 0.5)}>{s}</text>
+              {s.length > 3 ? (
+                <rect className="shape" x={-Math.max(r * 2, s.length * 9.4 + 18) / 2} y={-r} width={Math.max(r * 2, s.length * 9.4 + 18)} height={r * 2} rx={r * 0.55} />
+              ) : (
+                <circle className="shape" r={r} />
+              )}
+              <text className="v-txt" y={1} textAnchor="middle" dominantBaseline="central" fontSize={s.length > 3 ? 16 : fitFont(s, r * 2, 0.5)}>{s}</text>
             </g>
             {p.badges[id] && (
-              <text x={r + 4} y={-r + 2} fontSize={14} fontFamily="var(--f-code)" fontWeight={700} style={{ fill: 'var(--accent)' }}>{p.badges[id]}</text>
+              <text x={(s.length > 3 ? Math.max(r * 2, s.length * 9.4 + 18) / 2 : r) + 4} y={-r + 2} fontSize={14} fontFamily="var(--f-code)" fontWeight={700} style={{ fill: 'var(--accent)' }}>{p.badges[id]}</text>
             )}
             {(ptrByNode[id] ?? []).map((name, k) => {
               const pt = p.ptrs.find((x) => x.name === name)!;

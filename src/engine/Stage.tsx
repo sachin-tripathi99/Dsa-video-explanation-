@@ -71,7 +71,7 @@ export function Stage({ script, frame, narrow, scale }: { script: VideoScript; f
         {hasSide && (
           <div className="st-side">
             {code.length > 0 && (
-              <div className="st-code">
+              <div className="st-code" style={{ fontSize: Math.min(15, (narrow ? 690 : 330) / (Math.max(...code.map((l) => l.length), 1) * 0.61)) }}>
                 {code.map((l, i) => (
                   <div key={i} className={frame.line.includes(i) ? 'hl' : ''}>{l || ' '}</div>
                 ))}

@@ -385,7 +385,7 @@ async function runJava(jobs: Job[], res: Result) {
       : (j.judge as DesignJudge).tests.map((t, ti) => javaDesignTest(j.judge as DesignJudge, t, ti, j.id));
     fs.writeFileSync(
       path.join(dir, `${cls}.java`),
-      `import java.util.*;\nimport java.util.function.*;\nimport java.util.stream.*;\n\nclass ${cls} {\n${code}\n\n  static void run() {\n${tests.map((t) => '    ' + t).join('\n')}\n  }\n}\n`,
+      `import java.util.*;\nimport java.util.function.*;\nimport java.util.stream.*;\n\nclass ${cls} {\n${code}\n\n${tests.map((t, ti) => `  static void t${ti}() {\n    ${t}\n  }`).join('\n')}\n  static void run() {\n${tests.map((_, ti) => `    t${ti}();`).join('\n')}\n  }\n}\n`,
     );
   });
   fs.writeFileSync(
