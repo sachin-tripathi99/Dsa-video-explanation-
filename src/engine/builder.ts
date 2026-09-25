@@ -142,11 +142,13 @@ export class Video {
     }
     return this;
   }
+  /** Remove every panel and reset eq, note, highlighted lines and the counter. */
   clear() {
     this.panels.clear();
     this.order = [];
     this._counter = '';
-    return this;
+    this._layout = 'col';
+    return this.clearMarks();
   }
   /** Reorder panels. */
   arrange(...ids: string[]) {
@@ -275,7 +277,10 @@ export class Video {
 class Simple<T extends Panel> {
   constructor(public p: T) {}
   update(patch: Partial<T>) {
-    Object.assign(this.p, clone(patch));
+    for (const [k, val] of Object.entries(patch)) {
+      if (val === undefined) delete (this.p as unknown as Record<string, unknown>)[k];
+      else (this.p as unknown as Record<string, unknown>)[k] = clone(val);
+    }
     return this;
   }
 }

@@ -61,7 +61,8 @@ export interface FnJudge {
   fn: string;
   params: JType[];
   ret: JType;
-  tests: { args: unknown[]; out: unknown }[];
+  /** `big` tests are skipped for brute-force approaches (they would time out by design). */
+  tests: { args: unknown[]; out: unknown; big?: boolean }[];
   cmp?: Cmp;
   /** For void / in-place problems: compare this argument after the call. */
   inplace?: number;

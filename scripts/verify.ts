@@ -115,7 +115,7 @@ function makeRng(seedText: string): Rng {
 const deepClone = <T>(x: T): T => JSON.parse(JSON.stringify(x));
 
 function fnTestsFor(slug: string, j: FnJudge): Test[] {
-  const tests: Test[] = j.tests.map((t) => ({ args: t.args, out: t.out }));
+  const tests: Test[] = j.tests.map((t) => ({ args: t.args, out: t.out, big: t.big }));
   if (j.gen && j.ref) {
     const r = makeRng(slug);
     for (let i = 0; i < (j.genCount ?? 30); i++) {
@@ -236,6 +236,7 @@ interface Test {
   args: unknown[];
   out: unknown;
   video?: boolean;
+  big?: boolean;
 }
 interface Job {
   id: string; // unique solution id
@@ -618,7 +619,7 @@ async function main() {
         let judge = p.judge;
         let tests: Test[] = [];
         if (judge.type === 'fn') {
-          tests = fnTestsFor(slug, judge);
+          tests = fnTestsFor(slug, judge).filter((t) => !(t.big && a.kind === 'brute'));
           if (p.videoArgs && script && script.answer !== undefined) tests.push({ args: p.videoArgs, out: script.answer, video: true });
         } else judge = { ...judge, tests: designTestsFor(slug, judge) };
         jobs.push({ id: `${slug}~${a.id}~${lang}`, slug, approach: a.id, lang, code: fs.readFileSync(file, 'utf8'), judge, tests });

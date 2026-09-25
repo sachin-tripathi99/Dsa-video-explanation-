@@ -453,7 +453,7 @@ function SeqView({ p }: { p: StackPanel }) {
   const n = p.items.length;
   if (p.kind === 'stack') {
     const slots = Math.max(5, n);
-    const bw = 140;
+    const bw = 172;
     const bh = slots > 8 ? 34 : 42;
     const gap = 6;
     const H = slots * (bh + gap) + 40;
@@ -468,7 +468,7 @@ function SeqView({ p }: { p: StackPanel }) {
             <g key={it.k} className={`mv ${tc(p.tones[i])}`} style={{ transform: `translate(28px, ${y(i)}px)` }}>
               <g className="pop-in">
                 <rect className="shape" width={bw} height={bh} rx={8} />
-                <text className="v-txt" x={bw / 2} y={bh / 2 + 1} textAnchor="middle" dominantBaseline="central" fontSize={fitFont(s, bh * 2.6, 0.2)}>{s}</text>
+                <text className="v-txt" x={bw / 2} y={bh / 2 + 1} textAnchor="middle" dominantBaseline="central" fontSize={fitFont(s, bw, 0.12)}>{s}</text>
               </g>
             </g>
           );
