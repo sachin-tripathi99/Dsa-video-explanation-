@@ -1,0 +1,104 @@
+/* DryRun design tokens. Light palette on :root, dark palette via media query and data-theme. */
+:root {
+  --bg: #f4f6f2;
+  --surface: #ffffff;
+  --surface-2: #eceee9;
+  --surface-3: #e2e6df;
+  --ink: #17202b;
+  --ink-2: #4a5563;
+  --ink-3: #758090;
+  --line: #d8ddd5;
+  --line-2: #c5ccc2;
+
+  --accent: #2154d4;
+  --accent-ink: #ffffff;
+  --accent-soft: #e2e9fb;
+  --accent-soft-2: #eef2fd;
+  --p2: #8b3bc9;
+  --p2-soft: #f1e4fa;
+  --amber: #a96f06;
+  --amber-soft: #f6ebd2;
+
+  --brute: #c23f2d;
+  --brute-soft: #f8e2dd;
+  --better: #a96f06;
+  --better-soft: #f6ebd2;
+  --optimal: #1a8651;
+  --optimal-soft: #dbf0e4;
+
+  --stage: #fbfcf9;
+  --grid: #e8ebe4;
+  --shadow: 0 1px 2px rgba(23, 32, 43, 0.06), 0 8px 24px rgba(23, 32, 43, 0.06);
+  --shadow-lg: 0 2px 4px rgba(23, 32, 43, 0.06), 0 18px 48px rgba(23, 32, 43, 0.1);
+
+  --f-ui: 'Recursive Variable', 'Recursive', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-code: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --f-hand: 'Kalam', 'Comic Sans MS', 'Segoe Print', cursive;
+
+  --r-sm: 6px;
+  --r: 10px;
+  --r-lg: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --bg: #0f141a;
+    --surface: #161d25;
+    --surface-2: #1d2630;
+    --surface-3: #25303c;
+    --ink: #e4e9ef;
+    --ink-2: #a8b2be;
+    --ink-3: #7a8592;
+    --line: #29333f;
+    --line-2: #384452;
+    --accent: #7098ff;
+    --accent-ink: #0b1020;
+    --accent-soft: #1c2848;
+    --accent-soft-2: #18213a;
+    --p2: #c79bff;
+    --p2-soft: #2d2140;
+    --amber: #f0b540;
+    --amber-soft: #372c14;
+    --brute: #ff7b67;
+    --brute-soft: #3a2220;
+    --better: #f0b540;
+    --better-soft: #372c14;
+    --optimal: #52cf8f;
+    --optimal-soft: #163226;
+    --stage: #121920;
+    --grid: #1a232d;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+    --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.3), 0 18px 48px rgba(0, 0, 0, 0.35);
+  }
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0f141a;
+  --surface: #161d25;
+  --surface-2: #1d2630;
+  --surface-3: #25303c;
+  --ink: #e4e9ef;
+  --ink-2: #a8b2be;
+  --ink-3: #7a8592;
+  --line: #29333f;
+  --line-2: #384452;
+  --accent: #7098ff;
+  --accent-ink: #0b1020;
+  --accent-soft: #1c2848;
+  --accent-soft-2: #18213a;
+  --p2: #c79bff;
+  --p2-soft: #2d2140;
+  --amber: #f0b540;
+  --amber-soft: #372c14;
+  --brute: #ff7b67;
+  --brute-soft: #3a2220;
+  --better: #f0b540;
+  --better-soft: #372c14;
+  --optimal: #52cf8f;
+  --optimal-soft: #163226;
+  --stage: #121920;
+  --grid: #1a232d;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.3), 0 18px 48px rgba(0, 0, 0, 0.35);
+}
