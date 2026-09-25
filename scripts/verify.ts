@@ -674,6 +674,8 @@ async function main() {
         ok = false;
         return;
       }
+      // A null list / tree head is the empty structure.
+      if (out === null && j.judge.type === 'fn' && /^(ListNode|TreeNode)$/.test(baseT(j.judge.ret))) out = [];
       if (!compare(cmp, t.args as unknown[], out, t.out)) {
         err(`${label}: expected ${JSON.stringify(t.out).slice(0, 160)} got ${JSON.stringify(out).slice(0, 160)}`);
         ok = false;

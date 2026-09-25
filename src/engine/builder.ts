@@ -49,6 +49,7 @@ export class Video {
   chapter(id: string, title: string, opts: { kind?: ChapterKind; cx?: string; code?: string[] } = {}) {
     const kind = opts.kind ?? (KINDS.includes(id as ChapterKind) ? (id as ChapterKind) : 'concept');
     this.chapters.push({ id, title, kind, cx: opts.cx, code: opts.code });
+    this._counter = '';
     this._line = [];
     this._eq = '';
     this._eqTone = 'none';
