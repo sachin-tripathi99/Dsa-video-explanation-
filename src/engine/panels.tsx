@@ -487,7 +487,7 @@ function SeqView({ p }: { p: StackPanel }) {
       </Svg>
     );
   }
-  const slots = Math.max(6, n);
+  const slots = Math.max(4, n);
   const bw = slots > 10 ? 50 : 62;
   const gap = 6;
   const W = slots * (bw + gap) + 40;
@@ -823,7 +823,8 @@ export function PanelView({ p }: { p: Panel }) {
 export function panelGrow(p: Panel): number {
   switch (p.kind) {
     case 'vars': case 'bits': return 0;
-    case 'map': case 'stack': case 'queue': case 'table': return 1;
+    case 'map': case 'stack': case 'table': return 1;
+    case 'queue': return 1.3;
     case 'text': return p.big ? 3 : 1;
     case 'tree': case 'graph': case 'grid': case 'heap': case 'chart': return 2.2;
     default: return 1.4;
