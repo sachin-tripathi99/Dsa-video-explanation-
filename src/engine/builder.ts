@@ -110,7 +110,7 @@ export class Video {
     if (!this.chapters.length) this.chapter('intro', 'Introduction');
     this.frames.push({
       ch: this.chapters.length - 1,
-      say: say.trim(),
+      say: capitalise(say.trim()),
       hold: hold || (say ? 0 : 700),
       panels: this.order.map((id) => clone(this.panels.get(id)!)),
       layout: this._layout,
@@ -987,6 +987,11 @@ export class VarsH {
     this.p.vars = this.p.vars.filter((x) => x.name !== name);
     return this;
   }
+}
+
+/** Capitalise the first letter of each sentence (skipping one-letter variable names like "i"). */
+export function capitalise(text: string): string {
+  return text.replace(/(^|[.!?]\s+)([a-z])(?=[a-z])/g, (_m, pre: string, c: string) => pre + c.toUpperCase());
 }
 
 /** Handy for narration: 1 -> "one", 13 -> "thirteen". Falls back to digits. */
