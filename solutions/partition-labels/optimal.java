@@ -1,0 +1,16 @@
+class Solution {
+    public List<Integer> partitionLabels(String s) {
+        int[] last = new int[26];
+        for (int i = 0; i < s.length(); i++) last[s.charAt(i) - 'a'] = i;
+        List<Integer> out = new ArrayList<>();
+        int start = 0, end = 0;
+        for (int i = 0; i < s.length(); i++) {
+            end = Math.max(end, last[s.charAt(i) - 'a']);   // must reach this letter's last copy
+            if (i == end) {                                 // nothing inside appears later
+                out.add(end - start + 1);
+                start = i + 1;
+            }
+        }
+        return out;
+    }
+}
