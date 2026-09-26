@@ -185,7 +185,8 @@ function GridView({ p }: { p: GridPanel }) {
         const len = Math.hypot(x2 - x1, y2 - y1) || 1;
         const sh = cs * 0.32;
         const d = `M${x1 + ((x2 - x1) / len) * sh} ${y1 + ((y2 - y1) / len) * sh} L${x2 - ((x2 - x1) / len) * sh} ${y2 - ((y2 - y1) / len) * sh}`;
-        return <path key={`a${i}`} className={ec(a.tone)} d={d} markerEnd={`url(#${mid}-${markerFor(a.tone)})`} />;
+        // Thin stroke: marker size scales with stroke width, and these arrows are short.
+        return <path key={`a${i}`} className={ec(a.tone)} d={d} style={{ strokeWidth: 2 }} markerEnd={`url(#${mid}-${markerFor(a.tone)})`} />;
       })}
       {(p.ptrs ?? []).map((pt) => (
         <g key={`p-${pt.name}`} className={`mv ptr-${pt.color ?? 3}`} style={{ transform: `translate(${cx(pt.c)}px, ${cy(pt.r)}px)` }}>
