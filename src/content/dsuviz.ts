@@ -9,7 +9,7 @@ export function dsuViz(
   n: number,
   opts: { label?: string; labels?: (string | number)[]; arr?: boolean; arrLabel?: string; tid?: string; aid?: string } = {},
 ) {
-  const t = v.tree(opts.tid ?? 'dsu', { label: opts.label ?? 'forest: each tree is a group, the root is its leader', binary: false });
+  const t = v.tree(opts.tid ?? 'dsu', { label: opts.label ?? 'forest · root = group leader', binary: false });
   const L = opts.labels ?? Array.from({ length: n }, (_, i) => i);
   const ID = (i: number) => `u${i}`;
   for (let i = 0; i < n; i++) t.add(null, L[i], undefined, ID(i));
