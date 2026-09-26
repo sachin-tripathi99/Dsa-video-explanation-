@@ -157,12 +157,12 @@ function javaLit(t: string, v: any, ctx: { treeVar?: string }): string {
   if (tag === 'cycle') return `H.cycle(new int[]{${v[0].join(',')}}, ${v[1]})`;
   if (tag === 'ref' && t === 'TreeNode') return v === null ? 'null' : `H.find(${ctx.treeVar}, ${v})`;
   switch (t) {
-    case 'int': return v === -2147483648 ? 'Integer.MIN_VALUE' : String(v);
-    case 'long': return `${v}L`;
-    case 'double': return Number.isInteger(v) ? `${v}.0` : String(v);
-    case 'boolean': return String(v);
+    case 'int': case 'Integer': return v === -2147483648 ? 'Integer.MIN_VALUE' : String(v);
+    case 'long': case 'Long': return `${v}L`;
+    case 'double': case 'Double': return Number.isInteger(v) ? `${v}.0` : String(v);
+    case 'boolean': case 'Boolean': return String(v);
     case 'String': return JSON.stringify(v);
-    case 'char': return `'${v === "'" ? "\\'" : v === '\\' ? '\\\\' : v}'`;
+    case 'char': case 'Character': return `'${v === "'" ? "\\'" : v === '\\' ? '\\\\' : v}'`;
     case 'ListNode': return `H.list(new int[]{${(v as number[]).join(',')}})`;
     case 'TreeNode': return `H.tree(new Integer[]{${(v as (number | null)[]).map((x) => (x === null ? 'null' : x)).join(',')}})`;
   }

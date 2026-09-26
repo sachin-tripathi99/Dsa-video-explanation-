@@ -99,6 +99,8 @@ export interface ListPanel {
   showNull?: boolean;
   /** Two rows (used for merge of two lists). */
   row?: Record<string, number>;
+  /** Tighter rows for multi-row scenes without backward arcs. */
+  compact?: boolean;
 }
 
 export interface TreeNodeView {
@@ -164,6 +166,8 @@ export interface HeapPanel {
   label?: string;
   items: Item[];
   tones: Record<number, Tone>; // by position
+  /** Hide the array view under the tree. */
+  treeOnly?: boolean;
 }
 
 export interface ChartPanel {

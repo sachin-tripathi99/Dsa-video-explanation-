@@ -151,6 +151,12 @@ export class Video {
     this._layout = 'col';
     return this.clearMarks();
   }
+  /** Override how much space a panel takes relative to the others (see panelGrow). */
+  weight(id: string, grow: number) {
+    const p = this.panels.get(id) as (Panel & { grow?: number }) | undefined;
+    if (p) p.grow = grow;
+    return this;
+  }
   /** Reorder panels. */
   arrange(...ids: string[]) {
     this.order = [...ids.filter((i) => this.panels.has(i)), ...this.order.filter((i) => !ids.includes(i))];
@@ -174,12 +180,12 @@ export class Video {
     });
     return new GridH(p);
   }
-  list(id: string, values: (string | number)[], opts: { label?: string; showNull?: boolean; prefix?: string } = {}) {
+  list(id: string, values: (string | number)[], opts: { label?: string; showNull?: boolean; prefix?: string; compact?: boolean } = {}) {
     const pre = opts.prefix ?? id;
     const nodes = values.map((v, i) => ({ id: `${pre}${i}`, v }));
     const next: Record<string, string | null> = {};
     nodes.forEach((n, i) => (next[n.id] = i + 1 < nodes.length ? nodes[i + 1].id : null));
-    const p = this.add<ListPanel>({ kind: 'list', id, label: opts.label, nodes, next, tones: {}, ptrs: [], showNull: opts.showNull ?? true, row: {} });
+    const p = this.add<ListPanel>({ kind: 'list', id, label: opts.label, nodes, next, tones: {}, ptrs: [], showNull: opts.showNull ?? true, row: {}, compact: opts.compact });
     return new ListH(p);
   }
   tree(id: string, opts: { label?: string; binary?: boolean } = {}) {
@@ -230,8 +236,8 @@ export class Video {
     const p = this.add<MapPanel>({ kind: 'map', id, label: opts.label, entries: [], tones: {}, set: opts.set });
     return new MapH(p);
   }
-  heap(id: string, opts: { label?: string; min?: boolean; cmp?: (a: Val, b: Val) => number } = {}) {
-    const p = this.add<HeapPanel>({ kind: 'heap', id, label: opts.label, items: [], tones: {} });
+  heap(id: string, opts: { label?: string; min?: boolean; cmp?: (a: Val, b: Val) => number; treeOnly?: boolean } = {}) {
+    const p = this.add<HeapPanel>({ kind: 'heap', id, label: opts.label, items: [], tones: {}, treeOnly: opts.treeOnly });
     const min = opts.min ?? true;
     const cmp = opts.cmp ?? ((a: Val, b: Val) => (min ? Number(a) - Number(b) : Number(b) - Number(a)));
     return new HeapH(this, p, cmp);
@@ -1010,6 +1016,16 @@ export function words(n: number): string {
   if (n < 20) return small[n];
   if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? '-' + small[n % 10] : '');
   return String(n);
+}
+
+/** "first", "second", … "twenty-third" for narration. */
+export function ordinal(n: number): string {
+  const special: Record<string, string> = { one: 'first', two: 'second', three: 'third', five: 'fifth', eight: 'eighth', nine: 'ninth', twelve: 'twelfth' };
+  const w = words(n);
+  const parts = w.split('-');
+  const last = parts.pop()!;
+  const ord = special[last] ?? (last.endsWith('y') ? last.slice(0, -1) + 'ieth' : last + 'th');
+  return [...parts, ord].join('-');
 }
 
 export type { Item };

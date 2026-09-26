@@ -108,6 +108,30 @@ export const CHECKERS: Record<string, Checker> = {
     }
     return true;
   },
+  /** k pairs (u, v) with the smallest sums, ties in any order (373). */
+  kSmallestPairs: ([a, b, k], out) => {
+    if (!Array.isArray(out)) return false;
+    const want = Math.min(k, a.length * b.length);
+    if (out.length !== want) return false;
+    const sums: number[] = [];
+    for (const x of a) for (const y of b) sums.push(x + y);
+    sums.sort((x, y) => x - y);
+    const got = out.map((p: number[]) => p[0] + p[1]).sort((x: number, y: number) => x - y);
+    if (got.some((s: number, i: number) => s !== sums[i])) return false;
+    // each value pair used no more often than it can be formed
+    const cnt = (arr: number[], v: number) => arr.filter((x) => x === v).length;
+    const used = new Map<string, number>();
+    for (const p of out) {
+      if (!Array.isArray(p) || p.length !== 2) return false;
+      const key = `${p[0]},${p[1]}`;
+      used.set(key, (used.get(key) ?? 0) + 1);
+    }
+    for (const [key, c] of used) {
+      const [u, v] = key.split(',').map(Number);
+      if (c > cnt(a, u) * cnt(b, v)) return false;
+    }
+    return true;
+  },
   /** Rearranged with no equal neighbours, or "" when impossible (767). */
   noAdjacent: ([s], out, expected) => {
     if (expected === '') return out === '';

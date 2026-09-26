@@ -204,8 +204,8 @@ function ListView({ p }: { p: ListPanel }) {
   const boxH = 50;
   const gapX = 50;
   const rows = Math.max(1, ...Object.values(p.row ?? {}).map((r) => r + 1));
-  const rowH = 150;
-  const top = 64;
+  const rowH = p.compact ? 86 : 150;
+  const top = p.compact ? 26 : 64;
   const rowOf = (id: string) => p.row?.[id] ?? 0;
   // column index within each row
   const col: Record<string, number> = {};
@@ -218,7 +218,7 @@ function ListView({ p }: { p: ListPanel }) {
   const X = (id: string) => 24 + col[id] * (boxW + gapX);
   const Y = (id: string) => top + rowOf(id) * rowH;
   const W = 24 + maxCols * (boxW + gapX) + 70;
-  const H = top + (rows - 1) * rowH + boxH + 110;
+  const H = top + (rows - 1) * rowH + boxH + (p.compact ? 56 : 110);
   const mid = safeId(`l-${p.id}`);
   const exists = new Set(p.nodes.map((n) => n.id));
 
@@ -553,10 +553,10 @@ function HeapView({ p }: { p: HeapPanel }) {
   const r = 22;
   const treeW = Math.max(leafSlots * colW, 320);
   const cw = 44;
-  const arrW = Math.max(n, 1) * (cw + 4);
+  const arrW = p.treeOnly ? 0 : Math.max(n, 1) * (cw + 4);
   const W = Math.max(treeW, arrW) + 40;
   const treeH = (depth + 1) * levelH + 10;
-  const H = treeH + cw + 50;
+  const H = p.treeOnly ? treeH + 10 : treeH + cw + 50;
   const pos = (i: number) => {
     const d = Math.floor(Math.log2(i + 1));
     const idxInLevel = i + 1 - 2 ** d;
@@ -583,7 +583,7 @@ function HeapView({ p }: { p: HeapPanel }) {
           </g>
         );
       })}
-      {p.items.map((it, i) => {
+      {!p.treeOnly && p.items.map((it, i) => {
         const s = fmt(it.v);
         return (
           <g key={`a${it.k}`} className={`mv ${tc(p.tones[i])}`} style={{ transform: `translate(${ax(i)}px, ${treeH + 16}px)` }}>
@@ -828,6 +828,8 @@ export function PanelView({ p }: { p: Panel }) {
 
 /** Relative share of the visual area each panel kind asks for. */
 export function panelGrow(p: Panel): number {
+  const g = (p as { grow?: number }).grow;
+  if (g !== undefined) return g;
   switch (p.kind) {
     case 'vars': case 'bits': return 0;
     case 'map': case 'stack': case 'table': return 1;

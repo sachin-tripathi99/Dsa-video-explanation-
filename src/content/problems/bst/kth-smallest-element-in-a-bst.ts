@@ -1,5 +1,5 @@
 import type { Problem } from '../../types';
-import { Video, recap, words } from '../../helpers';
+import { Video, recap, words, ordinal } from '../../helpers';
 import { build, inorder, randomBst } from '../../treeutil';
 
 const T = [5, 3, 6, 2, 4, null, null, 1];
@@ -44,7 +44,7 @@ function video() {
     t.clearTones().tone(visited, 'done').tone(cur, k === 0 ? 'ok' : 'pivot');
     v.line(3).counter(`visited: ${K - k}`).eq(`pop ${t.val(cur)} → ${K - k === 1 ? '1st' : K - k === 2 ? '2nd' : `${K - k}rd`} smallest`, k === 0 ? 'ok' : 'none');
     if (k === 0) {
-      v.line(4).say(`That is the ${words(K)}rd smallest, ${words(t.val(cur) as number)}. We stop immediately, having visited only k nodes plus one path down.`.replace('threerd', 'third'));
+      v.line(4).say(`That is the ${ordinal(K)} smallest, ${words(t.val(cur) as number)}. We stop immediately, having visited only k nodes plus one path down.`);
       v.answer(t.val(cur));
       break;
     }

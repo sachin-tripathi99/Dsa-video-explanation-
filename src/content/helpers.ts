@@ -2,7 +2,7 @@
 import { Video } from '../engine/builder';
 import type { ChapterKind } from '../engine/types';
 
-export { Video, words } from '../engine/builder';
+export { Video, words, ordinal } from '../engine/builder';
 
 /** Title card + statement lines. */
 export function titleCard(v: Video, title: string, subtitle: string, say: string) {
