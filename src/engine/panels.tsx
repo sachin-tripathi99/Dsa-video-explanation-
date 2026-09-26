@@ -551,7 +551,7 @@ function HeapView({ p }: { p: HeapPanel }) {
   const colW = 54;
   const levelH = 70;
   const r = 22;
-  const treeW = Math.max(leafSlots * colW, 320);
+  const treeW = Math.max(leafSlots * colW, p.treeOnly ? 170 : 320);
   const cw = 44;
   const arrW = p.treeOnly ? 0 : Math.max(n, 1) * (cw + 4);
   const W = Math.max(treeW, arrW) + 40;
