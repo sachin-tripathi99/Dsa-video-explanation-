@@ -784,11 +784,17 @@ function IntervalsView({ p }: { p: IntervalsPanel }) {
       ))}
       {p.items.map((it) => {
         const x1 = X(it.s);
-        const x2 = X(it.e);
+        const x2 = Math.max(X(it.e), x1 + 4);
+        // Labels that do not fit inside a short bar sit beside it instead.
+        const tw = (it.text ?? '').length * 7.8 + 8;
+        const inside = x2 - x1 >= tw;
+        const right = x2 + 4 + tw <= W;
+        const tx = inside ? (x1 + x2) / 2 : right ? x2 + 5 : x1 - 5;
+        const anchor = inside ? 'middle' : right ? 'start' : 'end';
         return (
           <g key={it.k} className={`mv ${tc(p.tones[it.k])}`} style={{ transform: `translate(0px, ${10 + (it.row ?? 0) * rowH}px)` }}>
-            <path className="shape pth" d={`M${x1} 0 H${Math.max(x2, x1 + 4)} V26 H${x1} Z`} style={{ d: `path('M${x1} 0 H${Math.max(x2, x1 + 4)} V26 H${x1} Z')` } as React.CSSProperties} />
-            <text className="v-txt" x={(x1 + Math.max(x2, x1 + 4)) / 2} y={14} textAnchor="middle" dominantBaseline="central" fontSize={13}>{it.text}</text>
+            <path className="shape pth" d={`M${x1} 0 H${x2} V26 H${x1} Z`} style={{ d: `path('M${x1} 0 H${x2} V26 H${x1} Z')` } as React.CSSProperties} />
+            <text className="v-txt" x={tx} y={14} textAnchor={anchor} dominantBaseline="central" fontSize={13}>{it.text}</text>
           </g>
         );
       })}
