@@ -462,12 +462,17 @@ export class GridH {
 }
 
 export class ListH {
-  constructor(public p: ListPanel) {}
+  /** Node ids in creation order, so id(i) stays stable after order() / removeNode(). */
+  private created: string[];
+  constructor(public p: ListPanel) {
+    this.created = p.nodes.map((n) => n.id);
+  }
   ids() {
     return this.p.nodes.map((n) => n.id);
   }
+  /** Id of the i-th node as originally created (not its current display position). */
   id(i: number) {
-    return this.p.nodes[i].id;
+    return this.created[i] ?? this.p.nodes[i].id;
   }
   val(id: string) {
     return this.p.nodes.find((n) => n.id === id)?.v;
@@ -487,6 +492,7 @@ export class ListH {
   }
   add(id: string, v: string | number, at?: number, next: string | null = null) {
     const node = { id, v };
+    this.created.push(id);
     if (at === undefined) this.p.nodes.push(node);
     else this.p.nodes.splice(at, 0, node);
     this.p.next[id] = next;
