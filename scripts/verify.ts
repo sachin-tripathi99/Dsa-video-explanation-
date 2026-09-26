@@ -166,6 +166,12 @@ function javaLit(t: string, v: any, ctx: { treeVar?: string }): string {
     case 'ListNode': return `H.list(new int[]{${(v as number[]).join(',')}})`;
     case 'TreeNode': return `H.tree(new Integer[]{${(v as (number | null)[]).map((x) => (x === null ? 'null' : x)).join(',')}})`;
   }
+  if (t === 'int[]' && (v as number[]).length > 400) {
+    // Chunk into string constants below the 64 KB constant-pool limit.
+    const parts: string[] = [];
+    for (let i = 0; i < v.length; i += 5000) parts.push(JSON.stringify((v as number[]).slice(i, i + 5000).join(',')));
+    return `H.ints(${parts.join(', ')})`;
+  }
   if (isArr(t)) {
     const e = elemT(t);
     return `new ${t}{${(v as any[]).map((x) => javaLit(e, x, ctx)).join(', ')}}`;

@@ -23,6 +23,16 @@ final class H {
     @SafeVarargs
     static <T> List<T> L(T... xs) { return new ArrayList<>(Arrays.asList(xs)); }
 
+    /** Large int arrays arrive as comma-separated chunks (array literals would exceed the 64 KB method limit). */
+    static int[] ints(String... parts) {
+        String all = String.join(",", parts);
+        if (all.isEmpty()) return new int[0];
+        String[] xs = all.split(",");
+        int[] out = new int[xs.length];
+        for (int i = 0; i < xs.length; i++) out[i] = Integer.parseInt(xs[i]);
+        return out;
+    }
+
     static ListNode list(int[] vals) {
         ListNode dummy = new ListNode(0), cur = dummy;
         lastNodes = new ArrayList<>();
