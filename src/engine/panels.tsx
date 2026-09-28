@@ -441,6 +441,7 @@ function GraphView({ p }: { p: GraphPanel }) {
           <g key={n.id} className={tc(p.tones[n.id])} transform={`translate(${x}, ${y})`}>
             <circle className="shape" r={r} />
             <text className="v-txt" y={1} textAnchor="middle" dominantBaseline="central" fontSize={fitFont(n.label, r * 2, 0.5)}>{n.label}</text>
+            {n.sub && <text y={r + 14} textAnchor="middle" dominantBaseline="central" fontSize={13} fontFamily="var(--f-code)" fontWeight={600} style={{ fill: 'var(--ink-2)' }}>{n.sub}</text>}
             {p.badges[n.id] && (
               <g>
                 <rect x={-24} y={-r - 28} width={48} height={22} rx={6} style={{ fill: 'var(--accent-soft)', stroke: 'var(--accent)', strokeWidth: 1.2 }} />

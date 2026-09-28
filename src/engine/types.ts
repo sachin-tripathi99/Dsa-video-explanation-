@@ -127,6 +127,7 @@ export interface GraphNodeView {
   label: string;
   x: number; // 0..100
   y: number; // 0..100
+  sub?: string; // caption under the node
 }
 
 export interface GraphPanel {
