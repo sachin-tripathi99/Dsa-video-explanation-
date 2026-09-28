@@ -741,7 +741,7 @@ function BitsView({ p }: { p: BitsPanel }) {
               <span key={i} className={`bt-bit h-tn tn-${row.tones?.[i] ?? 'none'}`}>{b}</span>
             ))}
           </span>
-          {row.note && <span className="bt-note">{row.note}</span>}
+          <span className="bt-note">{row.note ?? ''}</span>
         </div>
       ))}
     </div>
@@ -832,7 +832,8 @@ export function panelGrow(p: Panel): number {
   const g = (p as { grow?: number }).grow;
   if (g !== undefined) return g;
   switch (p.kind) {
-    case 'vars': case 'bits': return 0;
+    case 'vars': return 0;
+    case 'bits': return 1;
     case 'map': case 'stack': case 'table': return 1;
     case 'queue': return 1.3;
     case 'text': return p.big ? 3 : 1;
