@@ -179,3 +179,44 @@ export function traversalVideo(kind: Order, T: (number | null)[]) {
   recap(v, rows, `${name}: ${seq}.`, ['Traversal → recursion first; stack to avoid deep recursion; Morris for O(1) space'], 'Know all three: interviewers often ask for the iterative version as a follow-up.');
   return v.build();
 }
+
+/** Level-by-level BFS scene: tree + queue holding the current level. `per` describes each level. */
+export function levelScene(
+  v: Video,
+  T: (number | null)[],
+  label: string,
+  per: (vals: number[], depth: number, ids: string[], t: TreeH) => { eq: string; ok?: boolean; say?: string; stop?: boolean },
+  lines: number[] = [1, 2, 3],
+) {
+  v.clear().layout('row');
+  const t = v.binaryTree('t', T, { label });
+  const q = v.queue('q', [], { label: 'queue = the current level', ends: ['front', 'back'] });
+  v.weight('t', 1.9).weight('q', 1);
+  let level: string[] = t.root() ? [t.root()!] : [];
+  let d = 0;
+  const done: string[] = [];
+  while (level.length) {
+    q.clearAll();
+    level.forEach((id) => q.push(t.val(id) as number));
+    t.clearTones();
+    done.forEach((x) => t.tone(x, 'done'));
+    t.tone(level, 'active');
+    const r = per(level.map((id) => t.val(id) as number), d, level, t);
+    v.line(...lines).counter(`level ${d} · size ${level.length}`).eq(r.eq, r.ok ? 'ok' : undefined);
+    if (r.say) v.say(r.say);
+    else v.hold(900);
+    if (r.stop) return t;
+    done.push(...level);
+    const next: string[] = [];
+    level.forEach((id) => {
+      const l = t.left(id), rr = t.right(id);
+      if (l) next.push(l);
+      if (rr) next.push(rr);
+    });
+    level = next;
+    d++;
+  }
+  t.clearTones();
+  q.clearAll();
+  return t;
+}
