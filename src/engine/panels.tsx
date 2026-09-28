@@ -232,7 +232,14 @@ function ListView({ p }: { p: ListPanel }) {
       const bx = X(to);
       const by = Y(to);
       let d: string;
-      if (rowOf(to) === rowOf(nd.id) && col[to] === col[nd.id] + 1) d = `M${ax} ${ay} L${bx - 2} ${by + boxH / 2}`;
+      const adjacent = rowOf(to) === rowOf(nd.id) && col[to] === col[nd.id] + 1;
+      if (adjacent && p.doubly) {
+        d = `M${ax} ${ay - 7} L${bx - 2} ${by + boxH / 2 - 7}`;
+        const back = `M${bx + 2} ${by + boxH / 2 + 7} L${X(nd.id) + boxW + 2} ${ay + 7}`;
+        const bt = p.tones[to];
+        const bk = bt === 'active' || bt === 'ok' || bt === 'path' ? bt : undefined;
+        edges.push(<path key={`b-${nd.id}`} className={`pth ${ec(bk)}`} d={back} style={{ d: `path('${back}')` } as React.CSSProperties} markerEnd={`url(#${mid}-${markerFor(bk)})`} />);
+      } else if (adjacent) d = `M${ax} ${ay} L${bx - 2} ${by + boxH / 2}`;
       else if (rowOf(to) !== rowOf(nd.id)) d = `M${ax} ${ay} C${ax + 40} ${ay}, ${bx - 40} ${by + boxH / 2}, ${bx - 2} ${by + boxH / 2}`;
       else if (col[to] > col[nd.id]) d = `M${ax} ${ay - 8} C${ax + 20} ${ay - 90}, ${bx + boxW / 2} ${by - 70}, ${bx + boxW / 2} ${by - 2}`;
       else d = `M${ax} ${ay + 10} C${ax + 10} ${ay + 95}, ${bx + boxW / 2} ${by + boxH + 75}, ${bx + boxW / 2} ${by + boxH + 2}`;

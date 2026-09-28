@@ -180,12 +180,12 @@ export class Video {
     });
     return new GridH(p);
   }
-  list(id: string, values: (string | number)[], opts: { label?: string; showNull?: boolean; prefix?: string; compact?: boolean } = {}) {
+  list(id: string, values: (string | number)[], opts: { label?: string; showNull?: boolean; prefix?: string; compact?: boolean; doubly?: boolean } = {}) {
     const pre = opts.prefix ?? id;
     const nodes = values.map((v, i) => ({ id: `${pre}${i}`, v }));
     const next: Record<string, string | null> = {};
     nodes.forEach((n, i) => (next[n.id] = i + 1 < nodes.length ? nodes[i + 1].id : null));
-    const p = this.add<ListPanel>({ kind: 'list', id, label: opts.label, nodes, next, tones: {}, ptrs: [], showNull: opts.showNull ?? true, row: {}, compact: opts.compact });
+    const p = this.add<ListPanel>({ kind: 'list', id, label: opts.label, nodes, next, tones: {}, ptrs: [], showNull: opts.showNull ?? true, row: {}, compact: opts.compact, doubly: opts.doubly });
     return new ListH(p);
   }
   tree(id: string, opts: { label?: string; binary?: boolean } = {}) {

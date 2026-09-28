@@ -101,6 +101,8 @@ export interface ListPanel {
   row?: Record<string, number>;
   /** Tighter rows for multi-row scenes without backward arcs. */
   compact?: boolean;
+  /** Also draw prev arrows between neighbours (doubly linked list). */
+  doubly?: boolean;
 }
 
 export interface TreeNodeView {
