@@ -15,6 +15,8 @@ export function callTree<S>(
     key: (s: S) => string;
     text: (s: S) => string;
     memo?: boolean;
+    /** a lasting colour for special calls, e.g. a found answer */
+    mark?: (s: S) => 'ok' | 'bad' | undefined;
     /** narration for a call (return undefined to just hold) */
     say?: (s: S, info: { repeat: boolean; cached: boolean; calls: number; depth: number }) => string | undefined;
     hold?: number;
@@ -33,7 +35,9 @@ export function callTree<S>(
     const repeat = seen.has(k);
     const cached = !!o.memo && done.has(k);
     const nid = T.enter(o.text(s));
-    if (cached) T.mark(nid, 'ok');
+    const special = o.mark?.(s);
+    if (special) T.mark(nid, special);
+    else if (cached) T.mark(nid, 'ok');
     else if (repeat) T.mark(nid, 'warn');
     seen.add(k);
     const kids = cached ? [] : o.kids(s);

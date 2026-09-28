@@ -3,7 +3,7 @@ from functools import cache
 
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
-        sys.setrecursionlimit(20000)
+        sys.setrecursionlimit(10000)
 
         @cache                                  # each amount solved once
         def fewest(a):
