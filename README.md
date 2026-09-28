@@ -18,6 +18,13 @@ npm run dev        # http://localhost:5173
 npm run build      # static site in dist/ (works from any folder or static host)
 ```
 
+## Deploy
+
+The build is a static site with relative paths and hash routing, so `dist/` can be served from
+any static host or sub-folder. `.github/workflows/deploy.yml` publishes it to GitHub Pages on every
+push to `main` (or manually from the Actions tab): enable it once under
+**Settings → Pages → Source: GitHub Actions**.
+
 ## Checks
 
 ```bash
